@@ -1,4 +1,3 @@
 {
-  "provider": "virtualbox"
+  "provider": "vmware_fusion"
 }
-

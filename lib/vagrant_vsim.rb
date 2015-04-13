@@ -4,7 +4,7 @@ configfile = 'vsim.conf'
 load configfile if File.exist?(configfile)
 
 BASE_IMAGE ||= "vsim_netapp-cm.tgz"
-BOX_NAME ||= "VSim"
+BOX_NAME ||= "VSim-vmware"
 CDOT_VERSION ||= "8.2.3"
 VAGRANT_MINVERSION = '1.7.2'
 
@@ -84,7 +84,7 @@ module VagrantPlugins
               begin
                 env[:machine].provider.driver.execute_command(
                 processed_command + [retryable: true])
-                rescue Vagrant::Errors::VBoxManageError => e
+                rescue => e
                 raise Vagrant::Errors::VMCustomizationFailed, {
                     command: command,
                     error: e.inspect
@@ -101,7 +101,7 @@ module VagrantPlugins
       name "VSimPlugin"
 
       action_hook :send_flags, :machine_action_up do |hook|
-        hook.after(VagrantPlugins::ProviderVirtualBox::Action::Boot, ::Vagrant::Action::Builder.new.tap do |b|
+        hook.after(HashiCorp::VagrantVMwarefusion::Action::Boot, ::Vagrant::Action::Builder.new.tap do |b|
           b.use VagrantPlugins::VSimPlugin::SendBootFlags
         end)
       end
@@ -184,7 +184,7 @@ module VagrantPlugins
         puts "Adding #{BOX_NAME} box to vagrant"
         env[:action_runner].run(Vagrant::Action.action_box_add, {
           :box_name => BOX_NAME,
-          :box_provider => "virtualbox",
+          :box_provider => "vmware_fusion",
           :box_url => File.join(tmp_dir, "#{BOX_NAME}.box"),
           :box_force => true,
           :box_download_insecure => true,

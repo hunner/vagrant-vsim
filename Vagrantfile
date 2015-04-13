@@ -30,9 +30,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     servicevm.vm.box = "ubuntu/trusty64"
     servicevm.vm.hostname = "servicevm"
     servicevm.ssh.insert_key = false
-    servicevm.vm.provider "virtualbox" do |v|
-      v.memory = 512
-      v.cpus = 1
+    servicevm.vm.provider "vmware_fusion" do |v|
+      v.vmx["memsize"] = 512
+      v.vmx["numvcpus"] = 1
     end
     servicevm.vm.network "private_network", ip: SERVICEVM_HOST_IP
     servicevm.vm.provision :shell, :path => File.dirname(__FILE__) + "/provision/vagrant.sh", :args => "servicevm"
@@ -61,7 +61,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vsim.vm.network "private_network", ip: NODE_MGMT_IP, auto_config: false
 
     vsim.vm.provision :shell, :path => File.dirname(__FILE__) + "/provision/vagrant.sh", :args => "vsim"
-    vsim.vm.provider "virtualbox" do |v|
+    vsim.vm.provider "vmware_fusion" do |v|
     #  v.gui = true
     end
   end
