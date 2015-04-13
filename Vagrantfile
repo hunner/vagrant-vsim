@@ -27,7 +27,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.define "servicevm" do |servicevm|
-    servicevm.vm.box = "ubuntu/trusty64"
+    servicevm.vm.box = "puppetlabs/ubuntu-14.04-64-nocm"
     servicevm.vm.hostname = "servicevm"
     servicevm.ssh.insert_key = false
     servicevm.vm.provider "vmware_fusion" do |v|
@@ -43,7 +43,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.define "vsim" do |vsim|
-    vsim.vm.box = "VSim"
+    vsim.vm.box = "VSim-vmware"
     vsim.ssh.host = SERVICEVM_HOST_IP
     vsim.ssh.insert_key = false
     vsim.ssh.forward_agent = true
