@@ -42,7 +42,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  config.vm.define "vsim" do |vsim|
+  config.vm.define "vsim-vmware" do |vsim|
     vsim.vm.box = "VSim-vmware"
     vsim.ssh.host = SERVICEVM_HOST_IP
     vsim.ssh.insert_key = false
@@ -58,11 +58,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vsim.vm.network "private_network", ip: NODE_MGMT_IP, auto_config: false
     vsim.vm.network "private_network", ip: NODE_MGMT_IP, auto_config: false
     vsim.vm.network "private_network", ip: NODE_MGMT_IP, auto_config: false, :mac => "0800DEADAC1D"
-    vsim.vm.network "private_network", ip: NODE_MGMT_IP, auto_config: false
+    #vsim.vm.network "private_network", ip: NODE_MGMT_IP, auto_config: false
 
     vsim.vm.provision :shell, :path => File.dirname(__FILE__) + "/provision/vagrant.sh", :args => "vsim"
     vsim.vm.provider "vmware_fusion" do |v|
-    #  v.gui = true
+      #v.vmx["vmci0.pciSlotNumber"] = "20"
+      v.gui = true
+      v.destroy_unused_network_interfaces = true
     end
   end
 end

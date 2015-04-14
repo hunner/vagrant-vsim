@@ -189,7 +189,7 @@ module VagrantPlugins
           :box_force => true,
           :box_download_insecure => true,
         })
-        FileUtils.rm_rf tmp_dir
+        #FileUtils.rm_rf tmp_dir
         puts "Done: #{BOX_NAME} box added to vagrant."
       end
     end
