@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 . /vagrant/vsim.conf
+sudo wget http://apt.puppetlabs.com/puppetlabs-release-trusty.deb -O /tmp/puppetlabs-release-trusty.deb
+sudo dpkg -i /tmp/puppetlabs-release-trusty.deb
 sudo apt-get -y update
-sudo apt-get -y install dnsmasq sshpass git
+sudo apt-get -y install dnsmasq sshpass git puppet puppetmaster
 BASEIP=`echo $NODE_MGMT_IP | cut -d"." -f1-3`
 sudo sh -c "cat <<EOF >> /etc/dnsmasq.conf
 dhcp-range=$BASEIP.60,$BASEIP.62,12h
@@ -20,3 +22,9 @@ sudo su $OS_USER -c "cd && git clone https://github.com/antani/nmsdk_ruby.git"
 
 sudo su $OS_USER -c "cp -R /home/vagrant/nmsdk_ruby/lib/rb/* /home/vagrant/chef/cookbooks/netapp/libraries"
 chown $OS_USER:$OS_USER /home/vagrant/chef/cookbooks/netapp/libraries/*
+
+echo "Preparing Puppet"
+[ -f "/vagrant/puppetlabs-netapp" ] && sudo ln -s /vagrant/puppetlabs-netapp /etc/puppet/modules/netapp
+[ -f "/vagrant/device.conf" ] && sudo ln -s /vagrant/device.conf /etc/puppet/device.conf
+sudo echo '127.0.1.1 puppet' >> /etc/hosts
+
