@@ -146,7 +146,7 @@ sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no $CLUSTER_USERNAME@$NODE_MGM
 
 
 echo "Running chef recipes"
-cd /home/vagrant/chef && chef-solo -c solo.rb -j web.json
+#cd /home/vagrant/chef && chef-solo -c solo.rb -j web.json
 
 
 echo "Running additional commands"
